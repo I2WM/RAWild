@@ -15,7 +15,7 @@ This release includes object detection, semantic segmentation, RAW simulation, a
 Datasets and checkpoints will be released separately.
 
 - Dataset download: [TODO: Google Drive link]
-- Checkpoint download: [Google Drive](https://drive.google.com/drive/folders/1AUpfrem-bAB-E9qdIKMVehXDcWl9Qh-d?usp=sharing)
+- Checkpoint download: [Google Drive]](https://drive.google.com/drive/folders/1ZNPpByAEjV5z14gwRVQgebslLu28Nt6g?usp=sharing)
 
 Checkpoint files are named as `<Backbone>-<Dataset>.pth`, for example `ResNet50-PAS.NM.pth` and `SwinT-AODRaw.pth`.
 

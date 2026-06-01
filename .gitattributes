@@ -1,0 +1,21 @@
+# Keep source files stable across Windows/Linux checkouts.
+* text=auto eol=lf
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+*.ico binary
+*.gz binary
+*.zip binary
+*.7z binary
+*.rar binary
+*.tar binary
+*.tgz binary
+*.pth binary
+*.pt binary
+*.ckpt binary
+*.npy binary
+*.npz binary

@@ -1,0 +1,64 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments and local package metadata
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+build/
+dist/
+
+# Jupyter and editor state
+.ipynb_checkpoints/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+tmp/
+temp/
+
+# ML datasets, checkpoints, and training outputs at repository root
+/data/
+/datasets/
+/checkpoints/
+/pretrained/
+/work_dirs/
+/outputs/
+/runs/
+/wandb/
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.engine
+*.pkl
+*.pickle
+*.npy
+*.npz
+
+# Archive artifacts
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar

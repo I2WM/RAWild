@@ -14,10 +14,15 @@ This release includes object detection, semantic segmentation, RAW simulation, a
 
 Datasets and checkpoints will be released separately.
 
-- Dataset download: [TODO: Google Drive link]
-- Checkpoint download: [Google Drive](https://drive.google.com/drive/folders/1ZNPpByAEjV5z14gwRVQgebslLu28Nt6g?usp=sharing)
+- Dataset download: [Google Drive](https://drive.google.com/drive/folders/1mWRpfFQZc8PafAl3bPkgWR8ZPTBOOcZI?usp=sharing)
+  - RAWild_Mutiraw: https://drive.google.com/drive/folders/1zmKUoUyjMoSE2jWIehoAxDQlutD6LC0a?usp=sharing
+  - Simulation: https://drive.google.com/drive/folders/1-x90kmXguv7vsjsIs9w3Kp459byy_hhN?usp=sharing
 
-Checkpoint files are named as `<Backbone>-<Dataset>.pth`, for example `ResNet50-PAS.NM.pth` and `SwinT-AODRaw.pth`.
+Dataset folders include `RAWild_Mutiraw` and `Simulation` under the Drive dataset folder.
+- Checkpoint download: [Google Drive](https://drive.google.com/drive/folders/1gJlPLMO7Ty0XszLQTJkoZUIxeqbOwKqd?usp=sharing)
+
+Checkpoint folders are organized as `Checkpoints/Det` for object detection and `Checkpoints/Seg` for semantic segmentation.
+Detection checkpoint files are named as `<Backbone>-<Dataset>.pth`, for example `ResNet50-PAS.NM.pth`; segmentation checkpoint files are named as `<Backbone>-<Domain>.pth`, for example `MiT-B3-normal.pth`.
 
 Set paths before running the examples:
 

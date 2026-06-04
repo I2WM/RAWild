@@ -14,9 +14,9 @@ This release includes object detection, semantic segmentation, RAW simulation, a
 
 Datasets and checkpoints will be released separately.
 
-- Dataset download: [Google Drive](https://drive.google.com/drive/folders/1mWRpfFQZc8PafAl3bPkgWR8ZPTBOOcZI?usp=sharing)
-  - RAWild_Mutiraw: https://drive.google.com/drive/folders/1zmKUoUyjMoSE2jWIehoAxDQlutD6LC0a?usp=sharing
-  - Simulation: https://drive.google.com/drive/folders/1-x90kmXguv7vsjsIs9w3Kp459byy_hhN?usp=sharing
+- Dataset download: 
+  - RAWild_Mutiraw: [Google Drive](https://drive.google.com/drive/folders/1zmKUoUyjMoSE2jWIehoAxDQlutD6LC0a?usp=sharing)
+  - Simulation: [Google Drive](https://drive.google.com/drive/folders/1-x90kmXguv7vsjsIs9w3Kp459byy_hhN?usp=sharing)
 
 Dataset folders include `RAWild_Mutiraw` and `Simulation` under the Drive dataset folder.
 - Checkpoint download: [Google Drive](https://drive.google.com/drive/folders/1gJlPLMO7Ty0XszLQTJkoZUIxeqbOwKqd?usp=sharing)

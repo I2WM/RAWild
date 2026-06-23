@@ -123,7 +123,7 @@ The following steps are applied independently for each image during training.
 
 ### Step 0: Auto white-balance normalization
 
-Un-white-balanced RAW images have a strong green bias (Bayer pattern: 2G vs 1R 1B, typically G/R ≈ 2.0). The cross-camera matrix assumes approximately balanced input channels. Apply diagonal white-balance normalization before the transform, and **undo it afterward** so the output retains the RAW-like green dominance.
+Un-white-balanced RAW images have a strong green bias (Bayer pattern: 2G vs 1R 1B, typically G/R ≈ 2.0). The cross-camera matrix assumes approximately balanced input channels. Apply diagonal white-balance normalization before the transform, and **reverse it afterward using target camera B's gray-world gains** (see Step 9) so the output retains the RAW-like green dominance.
 
 ```python
 ch_means = raw.mean(axis=(0, 1)) + 1e-8       # (3,)
@@ -288,9 +288,13 @@ v_flat = raw_balanced.reshape(-1, 3)                  # (N, 3)
 v_out = (M_full @ v_flat.T).T + beta[None, :]         # (N, 3)
 v_out = v_out.reshape(H, W, 3)
 
-# Undo auto white-balance to restore RAW-like green dominance.
-# Real RAW images always have G > R, G > B due to the Bayer pattern.
-v_out = v_out / wb_gain[None, None, :]
+# Reverse white-balance using target camera B's own gray-world multipliers
+# g_wb^B = r_{B,G} / r_B, with r_B = S_B^T I_T * dlambda (paper Sec. 7), rather
+# than the source wb_gain, so the output retains camera B's natural green
+# dominance (G > R, G > B) under illuminant I_T.
+r_B = S_B.T @ I_T * 10.0
+g_wb_B = r_B[1] / (r_B + 1e-8)
+v_out = v_out / g_wb_B[None, None, :]
 ```
 
 ---
@@ -344,7 +348,7 @@ raw ∈ [0,1]  (linear, black-level-subtracted, green-biased)
     ├── Step 8:  M_full = α·(diag(tint) @ M_cross + ε)          [assemble w/ tint+crosstalk]
     │
     ├── Step 9:  v' = M_full @ raw_bal + β                       [apply transform]
-    │            v' = v' / wb_gain                               [restore green bias]
+    │            v' = v' / g_wb_B                               [restore green bias]
     ├── Step 10: v'' = S·tanh(v'/S),  clip to [0, S]            [highlight roll-off]
     └── Step 11: quantize to b-bit                               [quantization]
             │

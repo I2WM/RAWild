@@ -124,7 +124,7 @@ I_d65 = d65 / (d65.max() + 1e-8)
 
 ### Step 0：自动白平衡归一化
 
-未做白平衡的 RAW 图像通常存在明显的绿色偏置（Bayer 模式是 2G 对 1R 1B，通常 G/R 约为 2.0）。而交叉相机矩阵默认假设输入通道是大致平衡的。因此，在变换前先做一次对角白平衡归一化，并在变换后**再撤销这一步**，这样输出仍然保留 RAW 图像典型的绿色优势。
+未做白平衡的 RAW 图像通常存在明显的绿色偏置（Bayer 模式是 2G 对 1R 1B，通常 G/R 约为 2.0）。而交叉相机矩阵默认假设输入通道是大致平衡的。因此，在变换前先做一次对角白平衡归一化，并在变换后**用目标相机 B 的灰世界增益反白平衡**（见 Step 9），这样输出仍然保留 RAW 图像典型的绿色优势。
 
 ```python
 ch_means = raw.mean(axis=(0, 1)) + 1e-8       # (3,)
@@ -289,9 +289,12 @@ v_flat = raw_balanced.reshape(-1, 3)                  # (N, 3)
 v_out = (M_full @ v_flat.T).T + beta[None, :]         # (N, 3)
 v_out = v_out.reshape(H, W, 3)
 
-# 撤销自动白平衡，以恢复 RAW 图像典型的绿色优势
-# 真实 RAW 图像通常满足 G > R, G > B，这是 Bayer 模式导致的
-v_out = v_out / wb_gain[None, None, :]
+# 按论文用目标相机 B 自身的灰世界增益 g_wb^B = r_{B,G}/r_B 反白平衡，
+# 其中 r_B = S_B^T I_T * dlambda（论文 Sec. 7），而非用源图的 wb_gain，
+# 从而保留相机 B 在光源 I_T 下的自然绿色优势（G > R, G > B）。
+r_B = S_B.T @ I_T * 10.0
+g_wb_B = r_B[1] / (r_B + 1e-8)
+v_out = v_out / g_wb_B[None, None, :]
 ```
 
 ---
@@ -345,7 +348,7 @@ raw ∈ [0,1]  （线性、已减 black level、带绿色偏置）
     ├── Step 8:  M_full = α·(diag(tint) @ M_cross + ε)          [组装最终矩阵]
     │
     ├── Step 9:  v' = M_full @ raw_bal + β                      [应用变换]
-    │            v' = v' / wb_gain                              [恢复绿色偏置]
+    │            v' = v' / g_wb_B                              [恢复绿色偏置]
     ├── Step 10: v'' = S·tanh(v'/S), clip 到 [0, S]             [高光 roll-off]
     └── Step 11: 量化到 b-bit                                    [量化]
             │

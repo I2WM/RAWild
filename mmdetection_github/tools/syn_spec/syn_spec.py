@@ -200,11 +200,17 @@ class RAWSimulator:
         v_out = (M_full @ v_flat.T).T + beta[None, :]
         v_out = v_out.reshape(H, W, 3)
 
-        # Step 9b: restore RAW-like green bias
-        # Real RAW images always have green dominance (Bayer pattern: 2G vs 1R 1B).
-        # Undo the auto_wb normalization so the output looks like RAW.
+        # Step 9b: re-impose target camera B's white balance.
+        # Per the paper (Sec. 7, Overall Transformation), reverse the white
+        # balance using target camera B's own gray-world multipliers
+        # g_wb^B = r_{B,G} / r_B, with r_B = S_B^T I_T * dlambda, rather than the
+        # source image's wb_gain. This retains camera B's natural green dominance
+        # (G > R, G > B) under illuminant I_T instead of re-imprinting the source
+        # camera's spectral bias.
         if auto_wb:
-            v_out = v_out / wb_gain[None, None, :]
+            r_B = S_B.T @ I_T * 10.0           # (3,) camera B response to I_T
+            g_wb_B = r_B[1] / (r_B + 1e-8)     # gray-world gains, green-normalized
+            v_out = v_out / g_wb_B[None, None, :]
 
         # Step 10: highlight roll-off
         S_sat = rng.uniform(*s_sat_range)

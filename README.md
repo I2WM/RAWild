@@ -2,6 +2,8 @@
 
 Official implementation of **RAWild: Sensor-Agnostic RAW Object Detection via Physics-Guided Curve and Grid Modeling**.
 
+**[Project Page](https://i2wm.github.io/RAWild/)**
+
 RAWild adds a lightweight RAW adapter before the downstream vision backbone. The adapter predicts a per-image Bezier tone curve and a bilateral-grid color transform, enabling robust perception across RAW images from different sensors, exposure levels, bit depths, and spectral responses.
 
 <p align="center">

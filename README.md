@@ -70,6 +70,19 @@ pip install -e . --no-deps
 
 The segmentation dependency snapshot was verified with Python 3.8, PyTorch 2.1.0 + CUDA 12.1, MMCV 2.1.0, and MMEngine 0.10.4.
 
+## Tools
+
+### ResNet-50 initialization
+
+Download the [official COCO-pretrained RetinaNet weights](https://download.openmmlab.com/mmdetection/v2.0/retinanet/retinanet_r50_fpn_1x_coco/retinanet_r50_fpn_1x_coco_20200130-c2398f9e.pth), then extract the backbone:
+
+```bash
+cd mmdetection_github
+python tools/extract_resnet50_backbone.py /path/to/retinanet_r50_fpn_1x_coco_20200130-c2398f9e.pth
+```
+
+The script verifies checksums and writes `resnet50_backbone.pth` to `$RAWILD_PRETRAINED_ROOT` (default: `checkpoints/pretrained`).
+
 ## Object Detection
 
 Configs:

@@ -10,6 +10,7 @@ PRETRAINED_ROOT = os.environ.get('RAWILD_PRETRAINED_ROOT', 'checkpoints/pretrain
 RUNTIME_ROOT = os.environ.get('RAWILD_WORK_DIR_ROOT', 'work_dirs')
 WORK_DIR_ROOT = f'{RUNTIME_ROOT}/RAWild_resnet50'
 CHECKPOINTS = dict(
+    # COCO RetinaNet backbone; extract with tools/extract_resnet50_backbone.py.
     resnet50_backbone=f'{PRETRAINED_ROOT}/resnet50_backbone.pth',
     rod_detector=f'{PRETRAINED_ROOT}/retinanet_r50_fpn_1x_coco_rod5_fullinit.pth',
     aodraw_detector=f'{PRETRAINED_ROOT}/retinanet_r50_fpn_1x_coco_aod_detectorinit.pth',

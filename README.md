@@ -52,7 +52,7 @@
 
 <a id="overview"></a>
 
-## 🔎 Overview
+## <img src="picture/logo.svg" alt="RAWild logo" width="28" height="28"> Overview
 
 RAWild enables sensor-agnostic RAW perception with a lightweight adapter combining a per-image Bezier tone curve and a bilateral-grid color transform.
 

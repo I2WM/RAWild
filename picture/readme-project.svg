@@ -1,10 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="154" height="36" viewBox="0 0 154 36" role="img" aria-labelledby="title">
   <title id="title">Project page</title>
   <rect x=".5" y=".5" width="153" height="35" rx="17.5" fill="#F2F0E8" stroke="#C8CEC3"/>
-  <g fill="none" stroke="#182420" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="23" cy="18" r="8"/>
-    <ellipse cx="23" cy="18" rx="3.5" ry="8"/>
-    <path d="M15 18h16M133 21l6-6m-6 0h6v6"/>
+  <g transform="translate(9 4) scale(.4375)" aria-hidden="true">
+    <rect width="64" height="64" rx="14" fill="#F2F0E8"/><path transform="translate(8.69 49) scale(0.02413 -0.02413)" fill="#182420" d="M432 535V0H137V1409H841Q1093 1409 1230.0 1300.5Q1367 1192 1367 989Q1367 841 1283.0 733.5Q1199 626 1056 592L1437 0H1105L778 535ZM1070 977Q1070 1078 1005.0 1129.0Q940 1180 810 1180H432V764H818Q942 764 1006.0 820.0Q1070 876 1070 977Z"/><circle cx="50.57" cy="45.6" r="3.6" fill="#D94F2B"/>
   </g>
+  <path d="M133 21l6-6m-6 0h6v6" fill="none" stroke="#182420" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
   <text x="40" y="23" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#182420">Project page</text>
 </svg>

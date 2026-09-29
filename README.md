@@ -1,32 +1,90 @@
-# RAWild
+<a id="top"></a>
 
-Official implementation of **RAWild: Sensor-Agnostic RAW Object Detection via Physics-Guided Curve and Grid Modeling**.
+<div align="center">
 
-**[Project Page](https://i2wm.github.io/RAWild/)**
+<h1>RAWild: Toward Sensor-Agnostic RAW Object Detection via Physics-Guided Curve and Grid Modeling</h1>
 
-RAWild adds a lightweight RAW adapter before the downstream vision backbone. The adapter predicts a per-image Bezier tone curve and a bilateral-grid color transform, enabling robust perception across RAW images from different sensors, exposure levels, bit depths, and spectral responses.
+<img src="picture/readme-cover.svg" alt="RAWild: Toward Sensor-Agnostic RAW Object Detection via Physics-Guided Curve and Grid Modeling, with the project RGB curves and bilateral-grid emblem" width="100%">
 
-<p align="center">
-  <img src="picture/pipeline.png" width="900">
+<p>⭐ NeurIPS 2026 ⭐</p>
+
+<p>
+  <a href="https://shuhongll.github.io/">Shuhong Liu</a><sup>1,2,*</sup>,
+  Gengjia Chang<sup>2,*</sup>,
+  Jun Liu<sup>2</sup>,
+  <a href="https://xg-chu.site/">Xuangeng Chu</a><sup>1,2</sup>,
+  <a href="https://www.ai.u-tokyo.ac.jp/ja/members/yqzheng">Yinqiang Zheng</a><sup>1</sup>,
+  <a href="https://www.mi.t.u-tokyo.ac.jp/harada/">Tatsuya Harada</a><sup>1,3</sup>, and
+  <a href="https://cuiziteng.github.io/">Ziteng Cui</a><sup>1,2,†</sup>
 </p>
 
-This release includes object detection, semantic segmentation, RAW simulation, and adapter visualization code.
+<p>
+  <sup>1</sup>The University of Tokyo &nbsp;
+  <sup>2</sup>I2WM &nbsp;
+  <sup>3</sup>RIKEN
+</p>
 
-## Assets
+<p>
+  <sup>*</sup>Equal contribution &nbsp;
+  <sup>†</sup>Corresponding author
+</p>
 
-Datasets and checkpoints will be released separately.
+<p align="center">
+  <a href="https://arxiv.org/abs/2605.05941"><img src="picture/readme-paper.svg" height="36" alt="Paper on arXiv"></a>
+  <a href="https://i2wm.github.io/RAWild/"><img src="picture/readme-project.svg" height="36" alt="Project page"></a>
+  <a href="#resources"><img src="picture/readme-datasets.svg" height="36" alt="Datasets and simulation data"></a>
+  <a href="https://drive.google.com/drive/folders/1gJlPLMO7Ty0XszLQTJkoZUIxeqbOwKqd?usp=sharing"><img src="picture/readme-checkpoints.svg" height="36" alt="Download checkpoints"></a>
+</p>
 
-- Dataset download: 
-  - RAWild_Mutiraw: [Google Drive](https://drive.google.com/drive/folders/1zmKUoUyjMoSE2jWIehoAxDQlutD6LC0a?usp=sharing)
-  - Simulation: [Google Drive](https://drive.google.com/drive/folders/1-x90kmXguv7vsjsIs9w3Kp459byy_hhN?usp=sharing)
+</div>
 
-Dataset folders include `RAWild_Mutiraw` and `Simulation` under the Drive dataset folder.
-- Checkpoint download: [Google Drive](https://drive.google.com/drive/folders/1gJlPLMO7Ty0XszLQTJkoZUIxeqbOwKqd?usp=sharing)
+<p align="center">
+  <a href="#overview">Overview</a> &nbsp;·&nbsp;
+  <a href="#resources">Resources</a> &nbsp;·&nbsp;
+  <a href="#installation">Installation</a> &nbsp;·&nbsp;
+  <a href="#object-detection">Detection</a>
+  <br>
+  <a href="#semantic-segmentation">Segmentation</a> &nbsp;·&nbsp;
+  <a href="#raw-simulation">RAW simulation</a> &nbsp;·&nbsp;
+  <a href="#visualization">Visualization</a> &nbsp;·&nbsp;
+  <a href="#citation">Citation</a>
+</p>
 
-Checkpoint folders are organized as `Checkpoints/Det` for object detection and `Checkpoints/Seg` for semantic segmentation.
-Detection checkpoint files are named as `<Backbone>-<Dataset>.pth`, for example `ResNet50-PAS.NM.pth`; segmentation checkpoint files are named as `<Backbone>-<Domain>.pth`, for example `MiT-B3-normal.pth`.
+<a id="overview"></a>
 
-Set paths before running the examples:
+## 🔎 Overview
+
+RAWild enables sensor-agnostic RAW perception with a lightweight adapter combining a per-image Bezier tone curve and a bilateral-grid color transform.
+
+<p align="center">
+  <img src="picture/pipeline.png" alt="RAWild pipeline: a per-image Bezier tone curve and bilateral-grid color transform before the vision backbone" width="100%">
+</p>
+
+<a id="assets"></a>
+
+<a id="resources"></a>
+
+## 📂 Resources
+
+| Resource | Contents | Link |
+| --- | --- | --- |
+| Project page | Method, results, film, and interactive demos | [Explore RAWild](https://i2wm.github.io/RAWild/) |
+| Paper | arXiv:2605.05941 | [Read the paper](https://arxiv.org/abs/2605.05941) |
+| Multi-RAW dataset | `RAWild_Mutiraw` | [Google Drive](https://drive.google.com/drive/folders/1zmKUoUyjMoSE2jWIehoAxDQlutD6LC0a?usp=sharing) |
+| Simulation data | `Simulation` | [Google Drive](https://drive.google.com/drive/folders/1-x90kmXguv7vsjsIs9w3Kp459byy_hhN?usp=sharing) |
+| Checkpoints | Object detection and semantic segmentation | [Google Drive](https://drive.google.com/drive/folders/1gJlPLMO7Ty0XszLQTJkoZUIxeqbOwKqd?usp=sharing) |
+
+<details>
+<summary><strong>🗂️ Checkpoint folders and naming</strong></summary>
+
+Checkpoint folders: `Checkpoints/Det` (detection) and `Checkpoints/Seg` (segmentation).
+Filenames: `<Backbone>-<Dataset>.pth` for detection (e.g. `ResNet50-PAS.NM.pth`); `<Backbone>-<Domain>.pth` for segmentation (e.g. `MiT-B3-normal.pth`).
+
+</details>
+
+### ⚙️ Configure paths
+
+Set once before running commands:
 
 ```bash
 export RAWILD_DATA_ROOT=<RAWild_datasets>
@@ -39,11 +97,13 @@ export RAWILD_MMSEG_DATA_ROOT="$RAWILD_DATA_ROOT/ADEChallengeData2016"
 export RAWILD_MMSEG_WORK_DIR_ROOT=work_dirs/rawild_mmseg
 ```
 
-`RAWILD_DATA_ROOT` should contain `PASCAL_RAW`, `PASCAL_RAW_npy`, `LOD_BMVC2021`, `ROD_dataset`, `AODRaw_dataset`, and `ADEChallengeData2016`.
+`RAWILD_DATA_ROOT` contains `PASCAL_RAW`, `PASCAL_RAW_npy`, `LOD_BMVC2021`, `ROD_dataset`, `AODRaw_dataset`, and `ADEChallengeData2016`.
 
-## Installation
+<a id="installation"></a>
 
-Detection:
+## 📦 Installation
+
+### 🛠️ Detection environment
 
 ```bash
 conda create -n RAWild_mmdet python=3.8 -y
@@ -57,7 +117,8 @@ pip install -r requirements.txt
 pip install -v -e .
 ```
 
-Segmentation:
+<details>
+<summary><strong>🧩 Segmentation environment (optional)</strong></summary>
 
 ```bash
 conda create -n RAWild_mmseg python=3.8 -y
@@ -68,11 +129,12 @@ pip install -r requirements.txt
 pip install -e . --no-deps
 ```
 
-The segmentation dependency snapshot was verified with Python 3.8, PyTorch 2.1.0 + CUDA 12.1, MMCV 2.1.0, and MMEngine 0.10.4.
+Verified stack: Python 3.8, PyTorch 2.1.0 + CUDA 12.1, MMCV 2.1.0, MMEngine 0.10.4.
 
-## Tools
+</details>
 
-### ResNet-50 initialization
+<details>
+<summary><strong>🧰 ResNet-50 initialization</strong></summary>
 
 Download the [official COCO-pretrained RetinaNet weights](https://download.openmmlab.com/mmdetection/v2.0/retinanet/retinanet_r50_fpn_1x_coco/retinanet_r50_fpn_1x_coco_20200130-c2398f9e.pth), then extract the backbone:
 
@@ -83,9 +145,14 @@ python tools/extract_resnet50_backbone.py /path/to/retinanet_r50_fpn_1x_coco_202
 
 The script verifies checksums and writes `resnet50_backbone.pth` to `$RAWILD_PRETRAINED_ROOT` (default: `checkpoints/pretrained`).
 
-## Object Detection
+</details>
 
-Configs:
+<a id="object-detection"></a>
+
+## 🎯 Object Detection
+
+<details>
+<summary><strong>⚙️ Detection configurations</strong></summary>
 
 | Setting | ResNet-50 | Swin-T |
 | --- | --- | --- |
@@ -97,14 +164,23 @@ Configs:
 | ROD | `config/RAWild_resnet50/rod.py` | `config/RAWild_swint/rod.py` |
 | AODRaw | `config/RAWild_resnet50/aodraw.py` | `config/RAWild_swint/aodraw.py` |
 
-Reported results of RAWild:
+</details>
 
-| Backbone | PAS.LOW @50/@75 | PAS.NM @50/@75 | PAS.OE @50/@75 | LOD @50/@75 | ROD @50/@75 | AODRAW @50/@75 |
-| --- | --- | --- | --- | --- | --- | --- |
-| ResNet-50 | 0.8911 / 0.7332 | 0.9019 / 0.7690 | 0.9020 / 0.7690 | 0.6909 / 0.4363 | 0.5541 / 0.3752 | 0.3623 / 0.2311 |
-| Swin-T | 0.9083 / 0.7406 | 0.9342 / 0.7792 | 0.9313 / 0.7921 | 0.6986 / 0.5057 | 0.5191 / 0.3467 | 0.4394 / 0.3263 |
+### 📊 Detection results
 
-Train:
+| Dataset | ResNet-50 @50 | ResNet-50 @75 | Swin-T @50 | Swin-T @75 |
+| --- | ---: | ---: | ---: | ---: |
+| PAS.LOW | 0.8911 | 0.7332 | 0.9083 | 0.7406 |
+| PAS.NM | 0.9019 | 0.7690 | 0.9342 | 0.7792 |
+| PAS.OE | 0.9020 | 0.7690 | 0.9313 | 0.7921 |
+| LOD | 0.6909 | 0.4363 | 0.6986 | 0.5057 |
+| ROD | 0.5541 | 0.3752 | 0.5191 | 0.3467 |
+| AODRAW | 0.3623 | 0.2311 | 0.4394 | 0.3263 |
+
+<details>
+<summary><strong>🏋️ Detection training and evaluation commands</strong></summary>
+
+#### 🏋️ Train
 
 ```bash
 cd mmdetection_github
@@ -113,14 +189,14 @@ python tools/train.py config/RAWild_resnet50/pascal_lod_mix.py
 python tools/train.py config/RAWild_swint/pascal_lod_mix.py
 ```
 
-Distributed training:
+#### ⚡ Distributed training
 
 ```bash
 bash tools/dist_train.sh config/RAWild_resnet50/pascal_lod_mix.py 4
 bash tools/dist_train.sh config/RAWild_swint/pascal_lod_mix.py 4
 ```
 
-Evaluate:
+#### 🧪 Evaluate
 
 ```bash
 python tools/test.py \
@@ -132,11 +208,16 @@ python tools/test.py \
   "$RAWILD_RELEASE_CKPT_ROOT/SwinT-PAS.NM.pth"
 ```
 
-Use the config table above to switch datasets or backbones.
+Switch datasets or backbones using the configuration table.
 
-## Semantic Segmentation
+</details>
 
-Configs:
+<a id="semantic-segmentation"></a>
+
+## 🧩 Semantic Segmentation
+
+<details>
+<summary><strong>⚙️ Segmentation configurations</strong></summary>
 
 | Backbone | Normal | Low | Over Exposure | Mix |
 | --- | --- | --- | --- | --- |
@@ -144,15 +225,20 @@ Configs:
 | MiT-B3 | `config/RAWild_mitb3/normal.py` | `config/RAWild_mitb3/low.py` | `config/RAWild_mitb3/oe.py` | `config/RAWild_mitb3/mix.py` |
 | MiT-B5 | `config/RAWild_mitb5/normal.py` | `config/RAWild_mitb5/low.py` | `config/RAWild_mitb5/oe.py` | `config/RAWild_mitb5/mix.py` |
 
-Reported results of RAWild:
+</details>
+
+### 📊 Segmentation results
 
 | Backbone | LOW mIoU | NM mIoU | OE mIoU |
-| --- | --- | --- | --- |
+| --- | ---: | ---: | ---: |
 | MiT-B0 | 0.2872 | 0.3534 | 0.3372 |
 | MiT-B3 | 0.3957 | 0.4516 | 0.4381 |
 | MiT-B5 | 0.4082 | 0.4708 | 0.4560 |
 
-Train:
+<details>
+<summary><strong>🏋️ Segmentation training and evaluation commands</strong></summary>
+
+#### 🏋️ Train
 
 ```bash
 cd mmsegmentation_github
@@ -162,7 +248,7 @@ python tools/train.py config/RAWild_mitb3/mix.py
 python tools/train.py config/RAWild_mitb5/mix.py
 ```
 
-Distributed training:
+#### ⚡ Distributed training
 
 ```bash
 bash tools/dist_train.sh config/RAWild_mitb0/mix.py 4
@@ -170,7 +256,7 @@ bash tools/dist_train.sh config/RAWild_mitb3/mix.py 4
 bash tools/dist_train.sh config/RAWild_mitb5/mix.py 4
 ```
 
-Evaluate:
+#### 🧪 Evaluate
 
 ```bash
 python tools/test.py \
@@ -186,11 +272,20 @@ python tools/test.py \
   "$RAWILD_RELEASE_CKPT_ROOT/rawild_mitb5_mix.pth"
 ```
 
-For paper-style evaluation, use the single-scale sliding-window path in the config and do not enable TTA.
+Paper evaluation: single-scale sliding window, no TTA.
 
-## RAW Simulation
+</details>
 
-The released dataset already includes processed PASCALRAW `.npy` files under `PASCAL_RAW_npy`. If you start from original PASCAL RAW `.nef` files, preprocess them with:
+<a id="raw-simulation"></a>
+
+## 🧬 RAW Simulation
+
+<details>
+<summary><strong>🧬 RAW simulation commands (optional)</strong></summary>
+
+### 📥 Prepare source RAW images
+
+Skip preprocessing for released `PASCAL_RAW_npy` data; use this only for original PASCALRAW `.nef` files.
 
 ```bash
 cd mmdetection_github
@@ -200,7 +295,7 @@ python PASCAL_RAW_pre_process.py \
   --out-root "$RAWILD_DATA_ROOT/PASCAL_RAW/original"
 ```
 
-Generate synthetic spectrum and mixed-bit PASCALRAW data:
+### 🧪 Generate synthetic data
 
 ```bash
 python tools/syn_spec/generate_pascal_normal_mixbit.py \
@@ -211,7 +306,7 @@ python tools/syn_spec/generate_pascal_normal_mixbit.py \
   --bit-depths 8 9 10 11 12
 ```
 
-Visualize camera-seed variants:
+### 🔍 Inspect camera-seed variants
 
 ```bash
 python tools/syn_spec/visualize_camera_seed_views.py \
@@ -220,17 +315,24 @@ python tools/syn_spec/visualize_camera_seed_views.py \
   --output-root "$RAWILD_WORK_DIR_ROOT/syn_spec/camera_seed_views"
 ```
 
-## Visualization
+</details>
+
+<a id="visualization"></a>
+
+## 🎨 Visualization
 
 | Input | Bezier |
 | --- | --- |
-| <img src="picture/official_rgb_original.png" width="360"> | <img src="picture/bezier_only.png" width="360"> |
+| <img src="picture/official_rgb_original.png" width="360" alt="Input image before the RAWild adapter"> | <img src="picture/bezier_only.png" width="360" alt="Image after the Bezier tone transform"> |
 
 | Bezier + Grid | Curve |
 | --- | --- |
-| <img src="picture/bezier_grid.png" width="360"> | <img src="picture/bezier_curve.png" width="360"> |
+| <img src="picture/bezier_grid.png" width="360" alt="Image after the Bezier and bilateral-grid transforms"> | <img src="picture/bezier_curve.png" width="360" alt="Predicted Bezier tone curve"> |
 
-Generate adapter visualizations:
+<details>
+<summary><strong>🎛️ Generate adapter visualizations</strong></summary>
+
+### 🎛️ Adapter outputs
 
 ```bash
 cd mmdetection_github
@@ -242,7 +344,7 @@ NO_ALBUMENTATIONS_UPDATE=1 python tools/visual_selection/visualize_bezier.py \
   --out-dir "$RAWILD_WORK_DIR_ROOT/visual_selection/pas_nm"
 ```
 
-Export the Bezier curve only:
+### 📈 Export the Bezier curve only
 
 ```bash
 NO_ALBUMENTATIONS_UPDATE=1 python tools/visual_selection/visualize_bezier.py \
@@ -253,7 +355,11 @@ NO_ALBUMENTATIONS_UPDATE=1 python tools/visual_selection/visualize_bezier.py \
   --curve-only
 ```
 
-## Citation
+</details>
+
+<a id="citation"></a>
+
+## 📚 Citation
 
 If you find this work useful, please cite:
 
@@ -265,3 +371,11 @@ If you find this work useful, please cite:
   year={2026}
 }
 ```
+
+---
+
+<p align="center">
+  <strong>From sensors to understanding.</strong><br>
+  <a href="https://i2wm.github.io/RAWild/">Explore the project</a> &nbsp;·&nbsp;
+  <a href="#top">Back to top ↑</a>
+</p>

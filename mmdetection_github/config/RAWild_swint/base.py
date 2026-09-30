@@ -523,7 +523,7 @@ def build_rod_config(
     )
     cfg['model']['backbone'].update(pretrained=None, bit_depth_norm_max=16.0, bit_embed_min=8, bit_embed_max=16)
     cfg['model']['bbox_head']['num_classes'] = len(ROD_CLASSES)
-    cfg['model']['test_cfg']['max_per_img'] = 10
+    cfg['model']['test_cfg']['max_per_img'] = 100  # ROD evaluation limit.
     train_dataset = _rod_dataset('train', False, resize_scale)
     if train_repeat_times != 1:
         train_dataset = dict(

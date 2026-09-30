@@ -143,7 +143,7 @@ cd mmdetection_github
 python tools/extract_resnet50_backbone.py /path/to/retinanet_r50_fpn_1x_coco_20200130-c2398f9e.pth
 ```
 
-The script verifies checksums and writes `resnet50_backbone.pth` to `$RAWILD_PRETRAINED_ROOT` (default: `checkpoints/pretrained`).
+The script verifies the source checksum and tensor round trip, then writes a metadata-free `resnet50_backbone.pth` to `$RAWILD_PRETRAINED_ROOT` (default: `checkpoints/pretrained`).
 
 </details>
 

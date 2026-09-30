@@ -483,7 +483,7 @@ def build_rod_config(resize_scale=COCO_RESIZE, train_repeat_times=1):
         load_from=CHECKPOINTS['rod_detector'],
     )
     cfg['model']['backbone'].update(init_cfg=None, bit_depth_norm_max=16.0)
-    cfg['model']['test_cfg']['max_per_img'] = 10
+    cfg['model']['test_cfg']['max_per_img'] = 100  # ROD evaluation limit.
     train_dataset = _rod_dataset('train', False, resize_scale)
     if train_repeat_times != 1:
         train_dataset = dict(

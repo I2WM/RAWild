@@ -47,6 +47,7 @@
   <a href="#semantic-segmentation">Segmentation</a> &nbsp;·&nbsp;
   <a href="#raw-simulation">RAW simulation</a> &nbsp;·&nbsp;
   <a href="#visualization">Visualization</a> &nbsp;·&nbsp;
+  <a href="#acknowledgments">Acknowledgments</a> &nbsp;·&nbsp;
   <a href="#citation">Citation</a>
 </p>
 
@@ -356,6 +357,13 @@ NO_ALBUMENTATIONS_UPDATE=1 python tools/visual_selection/visualize_bezier.py \
 ```
 
 </details>
+
+<a id="acknowledgments"></a>
+
+## 🙏 Acknowledgments
+
+This work was partially supported by JST Moonshot R&D Grant Number JPMJPS2011.
+Shuhong Liu was supported by JST BOOST, Japan Grant Number JPMJBS2418.
 
 <a id="citation"></a>
 

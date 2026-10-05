@@ -15,7 +15,7 @@
   <a href="https://xg-chu.site/">Xuangeng Chu</a><sup>1,2</sup>,
   <a href="https://www.ai.u-tokyo.ac.jp/ja/members/yqzheng">Yinqiang Zheng</a><sup>1</sup>,
   <a href="https://www.mi.t.u-tokyo.ac.jp/harada/">Tatsuya Harada</a><sup>1,3</sup>, and
-  <a href="https://cuiziteng.github.io/">Ziteng Cui</a><sup>1,2,†</sup>
+  <a href="https://cuiziteng.github.io/">Ziteng Cui</a><sup>1,†</sup>
 </p>
 
 <p>

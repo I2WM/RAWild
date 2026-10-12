@@ -362,9 +362,8 @@ NO_ALBUMENTATIONS_UPDATE=1 python tools/visual_selection/visualize_bezier.py \
 
 ## 🙏 Acknowledgments
 
-This work was partially supported by JST Moonshot R&D Grant Number JPMJPS2011.
+This work was partially supported by JST Moonshot R&D Grant Number JPMJPS2011 and JSPS KAKENHI Grant Number JP26K21296.
 Shuhong Liu was supported by JST BOOST, Japan Grant Number JPMJBS2418.
-This work was supported by JSPS KAKENHI Grant Number JP26K21296.
 
 <a id="citation"></a>
 

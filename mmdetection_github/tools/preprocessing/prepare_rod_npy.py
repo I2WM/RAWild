@@ -1,4 +1,13 @@
 #!/usr/bin/env python3
+"""Convert the public ICCV 2023 ROD challenge release (16089 train / 4000 val).
+
+Dataset index:
+https://github.com/amumu1843/Robust_Raw_Object_Detection/blob/main/ROD_Dataset/ROD_Dataset.md
+
+Outputs contain unnormalized RGB uint32 sensor counts. RAWild's ROD loader
+intentionally divides by 65535 once; values may exceed 1 after scaling.
+Pre-normalized [0, 1] NPY files are not interchangeable with these outputs.
+"""
 from __future__ import annotations
 
 import argparse

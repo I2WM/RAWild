@@ -278,7 +278,10 @@ class BilateralGridAdapter_DIA(BaseModule):
             raise ValueError('hist_prefix_tokens must be > 0.')
         if self.bit_embed_min > self.bit_embed_max:
             raise ValueError('bit_embed_min must be <= bit_embed_max.')
-        valid_hist_modes = {'quantile', 'legacy_conv'}
+        # 'quantile' (default): smooth inverse-CDF quantiles.
+        # 'quantile_soft_sort': quantiles read from a SoftSort relaxation.
+        # 'legacy_conv': convolutional encoder on an RGB-uv histogram.
+        valid_hist_modes = {'quantile', 'quantile_soft_sort', 'legacy_conv'}
         if self.hist_condition_mode not in valid_hist_modes:
             raise ValueError(
                 f'Invalid hist_condition_mode={self.hist_condition_mode!r}. '
@@ -521,6 +524,27 @@ class BilateralGridAdapter_DIA(BaseModule):
         feat = quantiles.reshape(x_8bit.shape[0], -1)
         return self.hist_token_encoder(feat)
 
+    def _build_soft_sort_quantile_hist_token(self, x_8bit):
+        samples = self._downsample_hist_input(
+            x_8bit.clamp(0.0, 1.0)).flatten(2)
+        dtype = samples.dtype
+        quantile_levels = self.hist_quantiles.to(dtype=dtype)
+
+        # SoftSort (Prillo and Eisenschlos, 2020), evaluated only at the
+        # ranks of the requested quantiles: each quantile is a softmax-weighted
+        # average of the pixel values around the sorted value at that rank,
+        # with temperature hist_sigma.
+        num_samples = samples.shape[-1]
+        sorted_values = torch.sort(samples, dim=-1).values
+        ranks = torch.round(
+            quantile_levels * float(num_samples - 1)).long()
+        anchors = sorted_values.index_select(-1, ranks)
+        distance = torch.abs(anchors.unsqueeze(-1) - samples.unsqueeze(2))
+        weights = torch.softmax(-distance / self.hist_sigma, dim=-1)
+        quantiles = (weights * samples.unsqueeze(2)).sum(dim=-1)
+        feat = quantiles.reshape(x_8bit.shape[0], -1)
+        return self.hist_token_encoder(feat)
+
     def _build_legacy_hist_token(self, x_8bit):
         hist = self.histogram(x_8bit)
         return self.hist_encoder(hist).flatten(1)
@@ -542,6 +566,8 @@ class BilateralGridAdapter_DIA(BaseModule):
 
         if self.hist_condition_mode == 'legacy_conv':
             hist_token = self._build_legacy_hist_token(x_8bit)
+        elif self.hist_condition_mode == 'quantile_soft_sort':
+            hist_token = self._build_soft_sort_quantile_hist_token(x_8bit)
         else:
             hist_token = self._build_soft_quantile_hist_token(x_8bit)
 

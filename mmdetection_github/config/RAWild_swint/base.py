@@ -189,7 +189,7 @@ def _model(num_classes):
     )
 
 
-def _train_shell(batch_size=1, num_workers=2):
+def _train_shell(batch_size=4, num_workers=4):
     return dict(
         batch_size=batch_size,
         num_workers=num_workers,
@@ -383,7 +383,7 @@ def _common_runtime(max_epochs=MAX_EPOCHS):
         train_cfg=dict(type='EpochBasedTrainLoop', max_epochs=max_epochs, val_interval=1),
         val_cfg=dict(type='ValLoop'),
         test_cfg=dict(type='TestLoop'),
-        auto_scale_lr=dict(base_batch_size=4, enable=False),
+        auto_scale_lr=dict(base_batch_size=16, enable=False),
         load_from=None,
         resume=False,
     )
@@ -442,8 +442,8 @@ def build_pascal_config(light_key):
     return cfg
 
 
-def build_pascal_lod_mix_config(max_epochs=MAX_EPOCHS, train_batch_size=1):
-    batch_suffix = '' if train_batch_size == 1 else f'_bs{train_batch_size}'
+def build_pascal_lod_mix_config(max_epochs=MAX_EPOCHS, train_batch_size=4):
+    batch_suffix = '' if train_batch_size == 4 else f'_bs{train_batch_size}'
     cfg = _common_runtime(max_epochs=max_epochs)
     cfg.update(
         experiment_config_name=f'RAWild_swint_pascal_lod_mix_667x400{batch_suffix}_epoch{max_epochs}',
@@ -492,11 +492,11 @@ def build_rod_config(
     resize_scale=COCO_RESIZE,
     train_repeat_times=1,
     max_epochs=MAX_EPOCHS,
-    train_batch_size=1,
+    train_batch_size=4,
 ):
     tag = _scale_tag(resize_scale)
     repeat_suffix = '' if train_repeat_times == 1 else f'_repeat{train_repeat_times}'
-    batch_suffix = '' if train_batch_size == 1 else f'_bs{train_batch_size}'
+    batch_suffix = '' if train_batch_size == 4 else f'_bs{train_batch_size}'
     cfg = _common_runtime(max_epochs=max_epochs)
     cfg.update(
         experiment_config_name=f'RAWild_swint_rod_{tag}{repeat_suffix}{batch_suffix}_epoch{max_epochs}',
@@ -541,11 +541,11 @@ def build_aodraw_config(
     resize_scale=COCO_RESIZE,
     train_repeat_times=1,
     max_epochs=MAX_EPOCHS,
-    train_batch_size=1,
+    train_batch_size=4,
 ):
     tag = _scale_tag(resize_scale)
     repeat_suffix = '' if train_repeat_times == 1 else f'_repeat{train_repeat_times}'
-    batch_suffix = '' if train_batch_size == 1 else f'_bs{train_batch_size}'
+    batch_suffix = '' if train_batch_size == 4 else f'_bs{train_batch_size}'
     cfg = _common_runtime(max_epochs=max_epochs)
     cfg.update(
         experiment_config_name=f'RAWild_swint_aodraw_{tag}{repeat_suffix}{batch_suffix}_epoch{max_epochs}',

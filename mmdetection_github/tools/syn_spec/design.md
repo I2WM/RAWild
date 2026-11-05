@@ -13,6 +13,11 @@ All operations are performed in **linear RAW space** (after black level subtract
 - `raw`: Source RAW image, shape `(H, W, 3)`, linear, black-level-subtracted, normalized to `[0, 1]`
 - `camspec_database.txt`: 28-camera spectral sensitivity database from Jiang et al. (2013)
 
+`camspec_database.txt` comes from Jiang et al. (2013) and is distributed under
+CC BY-NC-SA 4.0. Copyright is held by Rochester Institute of Technology.
+Source: https://www.gujinwei.org/research/camspec/db.html .
+This file is not covered by the MIT license of this repository.
+
 ---
 
 ## File: `camspec_database.txt` Format

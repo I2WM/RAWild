@@ -1,3 +1,13 @@
+# Original RepPoints V2 implementation by Yihong Chen et al. (MIT License):
+# https://github.com/Scalsol/RepPointsV2
+# License: https://github.com/Scalsol/RepPointsV2/blob/master/LICENSE
+# Adapted via Swin-Transformer-Object-Detection:
+# https://github.com/SwinTransformer/Swin-Transformer-Object-Detection/blob/master/mmdet/models/dense_heads/reppoints_v2_head.py
+# The intermediary repository is distributed under Apache License 2.0:
+# https://github.com/SwinTransformer/Swin-Transformer-Object-Detection/blob/master/LICENSE
+# Local modifications: MMEngine initialization imports, sampler/loss API
+# compatibility, bbox scale-factor handling, and the loss_by_feat shim.
+
 import numpy as np
 import torch
 import torch.nn as nn

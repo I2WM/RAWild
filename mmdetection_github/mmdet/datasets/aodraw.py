@@ -1,4 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+# Upstream source: https://github.com/lzyhha/AODRaw-mmdetection/blob/main/mmdet/datasets/aodraw.py
+# Upstream license: CC BY-NC 4.0 (https://github.com/lzyhha/AODRaw-mmdetection/blob/main/LICENSE).
+# Local modification: the class list only (add "cans" and remove "ignore").
 import copy
 import os.path as osp
 from typing import List

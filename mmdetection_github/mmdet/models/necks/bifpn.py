@@ -1,3 +1,10 @@
+# Adapted from Swin-Transformer-Object-Detection:
+# https://github.com/SwinTransformer/Swin-Transformer-Object-Detection/blob/master/mmdet/models/necks/bifpn.py
+# Upstream license: Apache License 2.0.
+# https://github.com/SwinTransformer/Swin-Transformer-Object-Detection/blob/master/LICENSE
+# Local modifications: import xavier_init from MMEngine and provide an
+# auto_fp16 fallback for MMCV versions without mmcv.runner.
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F

@@ -1,7 +1,8 @@
 # --------------------------------------------------------
 # Swin Transformer
 # Copyright (c) 2021 Microsoft
-# Licensed under The MIT License [see LICENSE for details]
+# Licensed under the MIT License:
+# https://github.com/microsoft/Swin-Transformer/blob/main/LICENSE
 # Written by Ze Liu, Yutong Lin, Yixuan Wei
 # --------------------------------------------------------
 

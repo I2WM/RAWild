@@ -47,6 +47,7 @@
   <a href="#semantic-segmentation">Segmentation</a> &nbsp;·&nbsp;
   <a href="#raw-simulation">RAW simulation</a> &nbsp;·&nbsp;
   <a href="#visualization">Visualization</a> &nbsp;·&nbsp;
+  <a href="#license">License</a> &nbsp;·&nbsp;
   <a href="#acknowledgments">Acknowledgments</a> &nbsp;·&nbsp;
   <a href="#citation">Citation</a>
 </p>
@@ -357,6 +358,20 @@ NO_ALBUMENTATIONS_UPDATE=1 python tools/visual_selection/visualize_bezier.py \
 ```
 
 </details>
+
+<a id="license"></a>
+
+## 📜 License
+
+| Asset | License |
+| --- | --- |
+| Code | MIT; third-party components remain under their licenses |
+| Detection checkpoints | CC BY-NC-SA 4.0 |
+| Segmentation checkpoints | NVIDIA Source Code License |
+| Simulated PASCALRAW, ROD | CC BY-NC-SA 4.0 |
+| Simulated LOD, repackaged MultiRAW | Not stated |
+
+`mmdetection_github/tools/syn_spec/camspec_database.txt` is distributed under CC BY-NC-SA 4.0 and is not covered by the MIT license of this repository.
 
 <a id="acknowledgments"></a>
 

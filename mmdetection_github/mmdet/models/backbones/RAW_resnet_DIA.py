@@ -54,7 +54,7 @@ class RAW_BilateralGrid_ResNet_DIA(BaseModule):
                  hist_bins=64,
                  hist_sigma=0.1,
                  hist_downsample_factor=16,
-                 hist_condition_mode='quantile',
+                 hist_condition_mode='quantile_soft_sort',
                  hist_prefix_tokens=8,
                  bit_embed_min=8,
                  bit_embed_max=24,

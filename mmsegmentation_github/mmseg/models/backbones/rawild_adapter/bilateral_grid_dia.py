@@ -221,7 +221,7 @@ class BilateralGridAdapter_DIA(BaseModule):
         bit_embed_min=8,
         bit_embed_max=24,
         bit_depth_norm_max=24.0,
-        hist_condition_mode='quantile',
+        hist_condition_mode='quantile_soft_sort',
     ):
         super().__init__()
 
@@ -278,8 +278,8 @@ class BilateralGridAdapter_DIA(BaseModule):
             raise ValueError('hist_prefix_tokens must be > 0.')
         if self.bit_embed_min > self.bit_embed_max:
             raise ValueError('bit_embed_min must be <= bit_embed_max.')
-        # 'quantile' (default): smooth inverse-CDF quantiles.
-        # 'quantile_soft_sort': quantiles read from a SoftSort relaxation.
+        # 'quantile': smooth inverse-CDF quantiles.
+        # 'quantile_soft_sort' (default): quantiles read from a SoftSort relaxation.
         # 'legacy_conv': convolutional encoder on an RGB-uv histogram.
         valid_hist_modes = {'quantile', 'quantile_soft_sort', 'legacy_conv'}
         if self.hist_condition_mode not in valid_hist_modes:

@@ -38,7 +38,7 @@ class RAW_BilateralGrid_MixVisionTransformer_DIA(MixVisionTransformer):
                  hist_bins=64,
                  hist_sigma=0.1,
                  hist_downsample_factor=16,
-                 hist_condition_mode='quantile',
+                 hist_condition_mode='quantile_soft_sort',
                  fixed_bit_depth=8,
                  bit_depth_norm_max=24.0,
                  **kwargs):

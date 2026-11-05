@@ -3,3 +3,4 @@
 rawpy
 imageio>=2.19
 tifffile
+timm==0.9.16

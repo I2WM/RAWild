@@ -57,6 +57,7 @@ class RAWSimulator:
         coeffs_all = {}
         for ch_idx, ch_name in enumerate(['R', 'G', 'B']):
             X = self.cameras[:, :, ch_idx]  # (N, 33)
+            X = X / (X.max(axis=1, keepdims=True) + 1e-8)  # peak-normalize
             p = PCA(n_components=2)
             coeffs = p.fit_transform(X)  # (N, 2)
             self.pca[ch_name] = p
@@ -113,7 +114,7 @@ class RAWSimulator:
                 tint_range=(-0.04, 0.04),
                 eps_range=(-0.05, 0.05),
                 delta_bl=0.02,
-                s_sat_range=(0.85, 1.0),
+                s_sat_range=(0.9, 1.0),
                 bit_depths=(10, 12, 14, 16),
                 auto_wb=True,
                 cct_amplify=1.0):
@@ -131,7 +132,7 @@ class RAWSimulator:
         cct_amplify : float
             Amplification factor for color temperature shift. Values > 1
             exaggerate the difference from D65 (e.g., 1.5 makes cold
-            scenes bluer and warm scenes more orange). Default 1.5.
+            scenes bluer and warm scenes more orange). Default 1.0.
 
         Returns
         -------
@@ -172,7 +173,7 @@ class RAWSimulator:
         # Step 5: tint offset
         # Tint (delta_uv) is a small chromaticity perturbation (~0.01 in
         # CIE 1960 UCS). Its effect on the broadband spectrum is negligible
-        # compared to the color temperature range (2500K-10000K), so we
+        # compared to the color temperature range (2500K-20000K), so we
         # apply it as a diagonal gain on the final matrix instead of
         # modifying the illuminant spectrum.
         tint_gain = self._tint_to_diagonal(I_T, delta_uv)
@@ -245,15 +246,15 @@ class RAWSimulator:
 
         Tint controls the green-magenta axis (perpendicular to the
         Planckian locus in CIE 1960 UCS):
-          - positive delta_uv → green: reduce R and B equally
-          - negative delta_uv → magenta: boost R and B equally
+          - positive delta_uv → green: reduce R and B
+          - negative delta_uv → magenta: boost R and B
 
-        The gain is applied symmetrically to R and B so that the
-        green-magenta shift is visually balanced.
+        R receives half the correction of B, which prevents over-reddening
+        under strong magenta tints.
         """
         # Strength: how much R,B change per unit delta_uv.
         # delta_uv ~ U(-0.04, 0.04).
-        # At delta_uv=0.04, we want R,B to drop to ~0.40 (60% reduction).
+        # At delta_uv=0.04, B drops to 0.40 and R drops to 0.70.
         strength = 15.0
         r_ratio = 0.5  # R responds less than B to tint shift
         gain_b = 1.0 - delta_uv * strength

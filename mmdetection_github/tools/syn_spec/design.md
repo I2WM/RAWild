@@ -43,7 +43,7 @@ cameras = raw_data.reshape(28, 3, 33)          # shape: (28, 3, 33)
 cameras = cameras.transpose(0, 2, 1)           # shape: (28, 33, 3)
 ```
 
-Each row is **peak-normalized** (max = 1 per channel per camera).
+Each curve is **peak-normalized** (max = 1 per channel per camera) before the PCA is fitted.
 
 ---
 
@@ -311,7 +311,7 @@ Model sensor non-linearity near full-well capacity with a soft-clip ($\tanh$), f
 $$f_\gamma(v) = S \cdot \tanh\!\left(\frac{v}{S}\right)$$
 
 ```python
-S_sat = np.random.uniform(0.85, 1.0)   # random saturation point
+S_sat = np.random.uniform(0.9, 1.0)   # random saturation point
 
 v_rolled = S_sat * np.tanh(v_out / S_sat)
 v_clipped = np.clip(v_rolled, 0.0, S_sat)
@@ -408,7 +408,7 @@ Alternatively, download CIE CMF and D65 from `cvrl.org` as CSV files.
 | Tint R ratio | — | 0.5 | R responds at half B strength to avoid red excess |
 | Crosstalk | $\epsilon_{ij}$ | $\mathcal{U}(-0.05,\, 0.05)$ | off-diagonal only, scales with exposure |
 | Black level offset | $\beta_c$ | $\mathcal{U}(-0.02,\, 0.02)$ | per channel |
-| Saturation point | $S$ | $\mathcal{U}(0.85,\, 1.0)$ | |
+| Saturation point | $S$ | $\mathcal{U}(0.9,\, 1.0)$ | |
 | Bit depth | $b$ | $\{10, 12, 14, 16\}$ | uniform choice |
 | PCA components | $k$ | 2 | per channel, per Jiang et al. 2013 |
 | PCA sampling | — | $\mathcal{N}(\mu,\, \sigma^2)$, clamped to $[\min, \max]$ | Gaussian, fitted from 28 cameras |

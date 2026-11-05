@@ -305,7 +305,7 @@ python tools/syn_spec/generate_pascal_normal_mixbit.py \
   --train-list "$RAWILD_DATA_ROOT/PASCAL_RAW/trainval/train.txt" \
   --val-list "$RAWILD_DATA_ROOT/PASCAL_RAW/trainval/val.txt" \
   --output-root "$RAWILD_WORK_DIR_ROOT/syn_spec/pascal_normal_mixbit" \
-  --bit-depths 8 9 10 11 12
+  --bit-depths 10 12 14 16
 ```
 
 ### 🔍 Inspect camera-seed variants

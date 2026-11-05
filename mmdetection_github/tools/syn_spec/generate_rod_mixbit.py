@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Generate the released rod_synspec_physbit_seed3407_full NPY images.
+"""Generate simulated ROD NPY images with the Appendix A settings.
 
 python tools/syn_spec/generate_rod_mixbit.py --raw-root /path/to/ROD --output-root /path/to/new_output
-Add --only train/day-02000 val/day-00000 for a small hash check; keep both full RAW splits available.
+Add --only train/day-02000 val/day-00000 for a small check; keep both full RAW splits available.
 
 Dependencies: scikit-learn==1.3.2, colour-science==0.4.1.
 Verified with Python 3.10, numpy==1.26.4 and scipy==1.15.3.
@@ -16,18 +16,18 @@ from pathlib import Path
 import numpy as np
 
 
-# Published settings. Keep the full sorted train/val order and RNG call order.
+# Appendix A settings. Keep the full sorted train/val order and RNG call order.
 SEED = 3407
-BIT_DEPTHS = (8, 9, 10, 11, 12)
+BIT_DEPTHS = (10, 12, 14, 16)
 SOURCE_WHITE_LEVEL = 65535.0
 RAW_HEIGHT, RAW_WIDTH = 1856, 2880
 SPLITS = (('train', '00Train', 16089), ('val', '01Valid', 4000))
-U_RANGE = (-3.0, 2.0)                 # Exposure multiplier = 2**u.
+U_RANGE = (-3.0, 3.0)                 # Exposure multiplier = 2**u.
 KELVIN_RANGE = (2500.0, 20000.0)      # Sample uniformly in reciprocal temperature.
 TINT_RANGE = (-0.04, 0.04)
 EPS_RANGE = (-0.05, 0.05)             # Off-diagonal channel mixing.
 BLACK_OFFSET = 0.02
-SATURATION_RANGE = (0.80, 1.00)
+SATURATION_RANGE = (0.90, 1.00)
 CAMERA_SEED_MAX = 2**31 - 1
 
 
@@ -49,7 +49,7 @@ def load_rod_raw(path):
 
 
 def simulate_rod(image, rng, simulator, bit_depth):
-    # Preserve the released ROD pipeline, including source-WB restoration.
+    # Transform in the white-balanced space, then restore target-camera WB.
     raw = image.astype(np.float32)
     means = raw.mean(axis=(0, 1)).astype(np.float64) + 1e-8
     wb_gain = (means[1] / means).astype(np.float32)
@@ -73,7 +73,9 @@ def simulate_rod(image, rng, simulator, bit_depth):
     matrix = (alpha * (tinted + epsilon)).astype(np.float32)
 
     out = (matrix @ balanced.reshape(-1, 3).T).T.reshape(raw.shape) + beta.reshape(1, 1, 3)
-    out = out / wb_gain.reshape(1, 1, 3)
+    response = camera.T.astype(np.float64) @ illuminant * 10.0
+    target_wb_gain = (response[1] / (response + 1e-8)).astype(np.float32)
+    out = out / target_wb_gain.reshape(1, 1, 3)
     sat = max(saturation, 1e-8)
     out = sat * np.tanh(out / sat)
     levels = float((1 << int(bit_depth)) - 1)
@@ -84,7 +86,9 @@ def simulate_rod(image, rng, simulator, bit_depth):
         'raw_bit_depth': int(bit_depth), 'storage_encoding': 'normalized_float',
         'camera_seed': camera_seed, 'u': u, 'alpha': alpha,
         'kelvin': kelvin, 'mired': mired, 'delta_uv': delta_uv,
-        'white_balance_gain': wb_gain.tolist(), 'matrix': matrix.tolist(),
+        'white_balance_gain': wb_gain.tolist(),
+        'target_white_balance_gain': target_wb_gain.tolist(),
+        'matrix': matrix.tolist(),
         'beta': beta.tolist(), 'saturation': saturation,
     }
 
@@ -97,7 +101,7 @@ def main():
                         help='New output directory; existing directories are never overwritten.')
     parser.add_argument('--seed', type=int, default=SEED)
     parser.add_argument('--only', nargs='+', metavar='SPLIT/STEM',
-                        help='Save selected samples while preserving the full release RNG sequence.')
+                        help='Save selected samples while preserving the full RNG sequence.')
     args = parser.parse_args()
 
     from syn_spec import RAWSimulator
@@ -108,7 +112,7 @@ def main():
         if len(paths[split]) != expected_count:
             raise ValueError(
                 f'{folder}: expected {expected_count} RAW files, found {len(paths[split])}. '
-                'Both full file lists are required for release-compatible RNG ordering; '
+                'Both full file lists are required for a stable RNG ordering; '
                 'use --only to generate selected outputs.')
     available = {f'{split}/{path.stem}' for split, files in paths.items() for path in files}
     selected = set(args.only) if args.only else available

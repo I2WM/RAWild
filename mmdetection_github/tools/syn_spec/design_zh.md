@@ -39,7 +39,7 @@ cameras = raw_data.reshape(28, 3, 33)          # 形状: (28, 3, 33)
 cameras = cameras.transpose(0, 2, 1)           # 形状: (28, 33, 3)
 ```
 
-每一行都经过了**峰值归一化**（每台相机每个通道的最大值为 1）。
+拟合 PCA 前，每条曲线都做**峰值归一化**（每台相机每个通道的最大值为 1）。
 
 ---
 
@@ -306,7 +306,7 @@ v_out = v_out / g_wb_B[None, None, :]
 $$f_\gamma(v) = S \cdot \tanh\!\left(\frac{v}{S}\right)$$
 
 ```python
-S_sat = np.random.uniform(0.85, 1.0)   # 随机饱和点
+S_sat = np.random.uniform(0.9, 1.0)   # 随机饱和点
 
 v_rolled = S_sat * np.tanh(v_out / S_sat)
 v_clipped = np.clip(v_rolled, 0.0, S_sat)
@@ -403,7 +403,7 @@ cc_reflectance = np.stack([
 | Tint 的 R 比例 | — | `0.5` | R 的响应强度是 B 的一半，避免过红 |
 | 串扰项 | `ε_ij` | `U(-0.05, 0.05)` | 仅非对角项，并随曝光一起缩放 |
 | Black level 偏移 | `β_c` | `U(-0.02, 0.02)` | 每通道独立 |
-| 饱和点 | `S` | `U(0.85, 1.0)` | |
+| 饱和点 | `S` | `U(0.9, 1.0)` | |
 | 位深 | `b` | `{10, 12, 14, 16}` | 均匀选择 |
 | PCA 主成分数 | `k` | `2` | 每个通道单独做 PCA，依据 Jiang et al. 2013 |
 | PCA 采样方式 | — | `N(μ, σ²)`，并裁剪到 `[min, max]` | 从 28 台相机拟合得到 |

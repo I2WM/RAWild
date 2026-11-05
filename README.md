@@ -2,9 +2,9 @@
 
 <div align="center">
 
-<h1>RAWild: Toward Sensor-Agnostic RAW Object Detection via Physics-Guided Curve and Grid Modeling</h1>
+<h1>RAWild: Sensor-Agnostic RAW Object Detection via Physics-Guided Curve and Grid Modeling</h1>
 
-<img src="picture/readme-cover.svg" alt="RAWild: Toward Sensor-Agnostic RAW Object Detection via Physics-Guided Curve and Grid Modeling, with the project RGB curves and bilateral-grid emblem" width="100%">
+<img src="picture/readme-cover.svg" alt="RAWild: Sensor-Agnostic RAW Object Detection via Physics-Guided Curve and Grid Modeling, with the project RGB curves and bilateral-grid emblem" width="100%">
 
 <p>⭐ NeurIPS 2026 ⭐</p>
 

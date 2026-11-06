@@ -24,9 +24,12 @@ DATA_ROOTS = dict(
     aodraw=f'{DATA_ROOT}/AODRaw_dataset',
 )
 
-PASCAL_CLASSES = ('car', 'person', 'bicycle')
+PASCAL_CLASSES = (
+    'car', 'person', 'bicycle', 'motorbike', 'chair',
+    'diningtable', 'bottle', 'tvmonitor', 'bus',
+)
 LOD_CLASSES = (
-    'bicycle', 'car', 'motorbike', 'chair',
+    'car', 'person', 'bicycle', 'motorbike', 'chair',
     'diningtable', 'bottle', 'tvmonitor', 'bus',
 )
 VOC_LOD_MIX_CLASSES = (
@@ -48,6 +51,8 @@ AODRAW_CLASSES = (
 )
 
 VOC_RESIZE = (667, 400)
+EVAL_RESIZE = (1200, 800)
+EVAL_RESIZE_LARGE = (1920, 1200)
 COCO_RESIZE = (1333, 800)
 PACK_META_KEYS = (
     'img_id', 'img_path', 'ori_shape', 'img_shape', 'scale_factor', 'raw_bit_depth'
@@ -399,7 +404,7 @@ def build_pascal_config(light_key):
     cfg = _common_runtime()
     cfg.update(
         experiment_config_name=f'RAWild_resnet50_{light_key}',
-        model=_model(3),
+        model=_model(len(PASCAL_CLASSES)),
         train_dataloader=_train_shell(),
         val_dataloader=_eval_shell(),
         test_dataloader=_eval_shell(),
@@ -407,10 +412,9 @@ def build_pascal_config(light_key):
         test_evaluator=dict(type='VOCMetric', metric='mAP', iou_thrs=[0.5, 0.75], eval_mode='11points'),
         work_dir=f'{WORK_DIR_ROOT}/{light_key}',
     )
-    cfg['model']['backbone'].update(bit_depth_norm_max=12.0)
     cfg['train_dataloader']['dataset'] = dict(type='RepeatDataset', times=5, dataset=_pascal_dataset(light_key, 'train', False))
-    cfg['val_dataloader']['dataset'] = _pascal_dataset(light_key, 'val', True)
-    cfg['test_dataloader']['dataset'] = _pascal_dataset(light_key, 'val', True)
+    cfg['val_dataloader']['dataset'] = _pascal_dataset(light_key, 'val', True, resize_scale=EVAL_RESIZE)
+    cfg['test_dataloader']['dataset'] = _pascal_dataset(light_key, 'val', True, resize_scale=EVAL_RESIZE)
     return cfg
 
 
@@ -440,7 +444,7 @@ def build_lod_config():
     cfg = _common_runtime()
     cfg.update(
         experiment_config_name='RAWild_resnet50_lod',
-        model=_model(8),
+        model=_model(len(LOD_CLASSES)),
         train_dataloader=_train_shell(),
         val_dataloader=_eval_shell(),
         test_dataloader=_eval_shell(),
@@ -448,10 +452,10 @@ def build_lod_config():
         test_evaluator=dict(type='VOCMetric', metric='mAP', iou_thrs=[0.5, 0.75], eval_mode='11points'),
         work_dir=f'{WORK_DIR_ROOT}/lod',
     )
-    cfg['model']['backbone'].update(bit_depth_norm_max=16.0, dia_activation='exp_tanh', dia_exp_alpha=1.0)
+    cfg['model']['backbone'].update(dia_activation='exp_tanh', dia_exp_alpha=1.0)
     cfg['train_dataloader']['dataset'] = dict(type='RepeatDataset', times=8, dataset=_lod_dataset('train', False))
-    cfg['val_dataloader']['dataset'] = _lod_dataset('val', True)
-    cfg['test_dataloader']['dataset'] = _lod_dataset('val', True)
+    cfg['val_dataloader']['dataset'] = _lod_dataset('val', True, resize_scale=EVAL_RESIZE)
+    cfg['test_dataloader']['dataset'] = _lod_dataset('val', True, resize_scale=EVAL_RESIZE)
     return cfg
 
 
@@ -492,8 +496,8 @@ def build_rod_config(resize_scale=COCO_RESIZE, train_repeat_times=1):
             dataset=train_dataset,
         )
     cfg['train_dataloader']['dataset'] = train_dataset
-    cfg['val_dataloader']['dataset'] = _rod_dataset('val', True, resize_scale)
-    cfg['test_dataloader']['dataset'] = _rod_dataset('val', True, resize_scale)
+    cfg['val_dataloader']['dataset'] = _rod_dataset('val', True, EVAL_RESIZE_LARGE)
+    cfg['test_dataloader']['dataset'] = _rod_dataset('val', True, EVAL_RESIZE_LARGE)
     return cfg
 
 
@@ -526,7 +530,7 @@ def build_aodraw_config(resize_scale=COCO_RESIZE, train_repeat_times=1):
     )
     cfg['model']['backbone'].update(init_cfg=None)
     cfg['model']['bbox_head']['num_classes'] = len(AODRAW_CLASSES)
-    cfg['model']['test_cfg']['max_per_img'] = 10
+    cfg['model']['test_cfg']['max_per_img'] = 100
     cfg['optim_wrapper']['optimizer']['weight_decay'] = 0.0001
     train_dataset = _aodraw_dataset('train', False, resize_scale)
     if train_repeat_times != 1:
@@ -536,6 +540,6 @@ def build_aodraw_config(resize_scale=COCO_RESIZE, train_repeat_times=1):
             dataset=train_dataset,
         )
     cfg['train_dataloader']['dataset'] = train_dataset
-    cfg['val_dataloader']['dataset'] = _aodraw_dataset('test', True, resize_scale)
-    cfg['test_dataloader']['dataset'] = _aodraw_dataset('test', True, resize_scale)
+    cfg['val_dataloader']['dataset'] = _aodraw_dataset('test', True, EVAL_RESIZE_LARGE)
+    cfg['test_dataloader']['dataset'] = _aodraw_dataset('test', True, EVAL_RESIZE_LARGE)
     return cfg

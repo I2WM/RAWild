@@ -300,6 +300,7 @@ python PASCAL_RAW_pre_process.py \
 ### 🧪 Generate synthetic data
 
 ```bash
+pip install scikit-learn==1.3.2 colour-science==0.4.1
 python tools/syn_spec/generate_pascal_normal_mixbit.py \
   --source-root "$RAWILD_PASCAL_NPY_ROOT/demosaic_normal_12bit" \
   --train-list "$RAWILD_DATA_ROOT/PASCAL_RAW/trainval/train.txt" \
